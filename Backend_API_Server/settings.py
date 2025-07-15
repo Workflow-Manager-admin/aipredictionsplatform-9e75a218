@@ -31,9 +31,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # Add your API apps here
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",  # Must be high in the list (ideally first)
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -89,3 +91,36 @@ REST_FRAMEWORK = {
         # 'Backend_API_Server.auth_utils.FusionAuthJWTAuthentication',  # To register custom authentication backend if needed
     ),
 }
+
+# --- CORS configuration (django-cors-headers) ---
+
+# Accept environment-based or sensible defaults for allowed frontend origins
+import re
+
+# Allow from environment or set reasonable React dev/prod patterns (adjust for your project)
+CORS_ALLOWED_ORIGINS = [
+    os.environ.get("FRONTEND_DEV_ORIGIN", "http://localhost:3000"),
+    os.environ.get("FRONTEND_PROD_ORIGIN", "https://yourfrontenddomain.com"),
+]
+
+# Allow regex patterns (uncomment below if you want to allow subdomains, e.g., for review apps)
+# CORS_ALLOWED_ORIGIN_REGEXES = [
+#     r"^https://.*\.yourfrontenddomain\.com$",
+# ]
+
+# If you want all origins (not for production!), set:
+# CORS_ALLOW_ALL_ORIGINS = DEBUG
+
+CORS_ALLOW_CREDENTIALS = True
+
+# Allow 'Authorization' header for JWT usage
+CORS_ALLOW_HEADERS = list(os.environ.get(
+    "CORS_ALLOW_HEADERS",
+    "accept,accept-encoding,authorization,content-type,dnt,origin,user-agent,x-csrftoken,x-requested-with"
+).split(","))
+
+CORS_EXPOSE_HEADERS = [
+    "Authorization",
+    # other exposed headers as needed
+]
+
