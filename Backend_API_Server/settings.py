@@ -43,7 +43,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    # Place for custom authentication middleware if needed
+    # To enable JWT auth middleware for API protection, uncomment the line below:
+    # "Backend_API_Server.jwt_middleware.FusionAuthJWTMiddleware",
 ]
 
 ROOT_URLCONF = "Backend_API_Server.urls"
